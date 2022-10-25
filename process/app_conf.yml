@@ -4,6 +4,6 @@ datastore:
 scheduler:
   period_sec: 5
 eventstore1:
-  url: http://localhost:8090/farms/env
+  url: http://storage:8090/farms/env
 eventstore2:
-  url: http://localhost:8090/farms/res
+  url: http://storage:8090/farms/res
