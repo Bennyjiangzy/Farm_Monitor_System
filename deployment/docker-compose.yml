@@ -47,7 +47,7 @@ services:
   receiver:
     depends_on:
       - kafka
-    image: audit
+    image: receiver
     ports:
       - "8080:8080"
 
