@@ -1,0 +1,106 @@
+---
+openapi: 3.0.0
+info:
+  title: Reading API
+  description: This is a API for recive environment and resources information for greenhouses
+  contact:
+    email: zjiang35@bcit.com
+  version: 1.0.0
+tags:
+- name: environment
+  description: environment sensors
+- name: resources
+  description: resource sensors
+paths:
+  /farms/env:
+    post:
+      tags:
+      - environment
+      summary: current growth environment information
+      description: Adds current growth environment information to the system
+      operationId: app.report_environment_info
+      requestBody:
+        description: Environment info to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentInfo'
+      responses:
+        "201":
+          description: env info created
+        "400":
+          description: invalid input, object invalid
+  /farms/res:
+    post:
+      tags:
+      - resources
+      summary: current resource cost since the last report
+      description: Adds current resource cost since the last report to the system
+      operationId: app.report_resources_info
+      requestBody:
+        description: Resource info to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceInfo'
+      responses:
+        "201":
+          description: res info created
+        "400":
+          description: invalid input, object invalid
+components:
+  schemas:
+    EnvironmentInfo:
+      required:
+      - containerId
+      - humidity
+      - lightIntensity
+      - temperature
+      - timestamp
+      type: object
+      properties:
+        containerId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        temperature:
+          type: number
+          example: 40.2
+        humidity:
+          type: number
+          example: 0.8
+        lightIntensity:
+          type: number
+          example: 2600
+        timestamp:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      description: Environment info
+    ResourceInfo:
+      required:
+      - containerId
+      - electricity
+      - fertilize
+      - timestamp
+      - water
+      type: object
+      properties:
+        containerId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        water:
+          type: number
+          example: 40
+        electricity:
+          type: number
+          example: 50
+        fertilize:
+          type: number
+          example: 50
+        timestamp:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      description: Resources cost info

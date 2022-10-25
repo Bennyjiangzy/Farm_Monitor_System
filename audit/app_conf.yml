@@ -1,0 +1,11 @@
+version: 1
+datastore:
+  user: root
+  password: password
+  hostname: benny-3855-lab.westeurope.cloudapp.azure.com
+  port: 3306
+  db: events
+events:
+  hostname: benny-3855-lab.westeurope.cloudapp.azure.com
+  port: 9092
+  topic: events

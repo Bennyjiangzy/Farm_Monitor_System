@@ -1,0 +1,76 @@
+---
+openapi: 3.0.0
+info:
+  title: Stats API
+  description: This API provides event stats
+  contact:
+    email: zjiang35@bcit.com
+  version: 1.0.0
+tags:
+- name: stats
+  description: stats services
+paths:
+  /stats:
+    get:
+      tags:
+      - stats_get
+      summary: gets new environment readings
+      operationId: app.get_stats
+      description: Gets stats for environment and resources info
+      responses:
+        '200':
+          description: Successfully returned a list of stats events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    ReadingStats:
+      required:
+      - avg_env_humidity_reading
+      - avg_env_temp_reading
+      - max_env_temp_reading
+      - avg_res_elerity_reading
+      - avg_res_water_reading
+      - max_res_water_reading
+      - nm_res_recived
+      - nm_env_recived
+      type: object
+      properties:
+        avg_env_humidity_reading:
+          type: number
+          example: 0.8
+        nm_env_recived:
+          type: integer
+          example: 50
+        avg_env_temp_reading:
+          type: number
+          example: 40.2
+        max_env_temp_reading:
+          type: number
+          example: 40.2
+        avg_res_elerity_reading:
+          type: number
+          example: 50
+        avg_res_water_reading:
+          type: number
+          example: 40
+        max_res_water_reading:
+          type: number
+          example: 40
+        nm_res_recived:
+          type: integer
+          example: 50
+      description: Stats info

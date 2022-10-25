@@ -1,0 +1,146 @@
+---
+openapi: 3.0.0
+info:
+  title: Reading API
+  description: This is a API for recive environment and resources information for greenhouses
+  contact:
+    email: zjiang35@bcit.com
+  version: 1.0.0
+tags:
+- name: environment
+  description: environment sensors
+- name: resources
+  description: resource sensors
+paths:
+  /farms/env:
+    get:
+      tags:
+      - environment_get
+      summary: gets new environment readings
+      operationId: app.get_environment_info
+      description: Gets environment readings added after a timestamp
+      parameters:
+        - name: timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: 2016-08-29 09:12:33.001
+      responses:
+        '200':
+          description: Successfully returned a list of environments events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnvironmentInfo'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /farms/res:
+    get:
+      tags:
+      - resources_get
+      summary: gets new resources readings
+      operationId: app.get_resources_info
+      description: Gets resources readings added after a timestamp
+      parameters:
+        - name: timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: 2016-08-29T09:12:33.001Z
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceInfo'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    EnvironmentInfo:
+      required:
+      - containerId
+      - humidity
+      - lightIntensity
+      - temperature
+      - traceid
+      - timestamp
+      type: object
+      properties:
+        containerId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        temperature:
+          type: number
+          example: 40.2
+        humidity:
+          type: number
+          example: 0.8
+        lightIntensity:
+          type: number
+          example: 2600
+        traceid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851 
+        timestamp:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      description: Environment info
+    ResourceInfo:
+      required:
+      - containerId
+      - electricity
+      - fertilize
+      - timestamp
+      - traceid
+      - water
+      type: object
+      properties:
+        containerId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        water:
+          type: number
+          example: 40
+        electricity:
+          type: number
+          example: 50
+        fertilize:
+          type: number
+          example: 50
+        traceid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851  
+        timestamp:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      description: Resources cost info
