@@ -71,6 +71,14 @@ services:
     image: audit
     ports:
       - "8110:8110"
+
+  dashboard:
+    depends_on:
+      - audit_log
+      - processing
+    image: dashboard
+    ports:
+      - "3000:3000"
 # Names our volume
 volumes:
   my-db:
