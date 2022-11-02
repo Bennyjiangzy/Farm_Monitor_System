@@ -15,6 +15,7 @@ export default function AppStats() {
                 setStats(result);
                 setIsLoaded(true);
             },(error) =>{
+                console.log(error)
                 setError(error)
                 setIsLoaded(true);
             })
