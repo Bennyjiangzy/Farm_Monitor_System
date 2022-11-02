@@ -74,7 +74,7 @@ services:
 
   dashboard:
     depends_on:
-      - audit_log
+      - auditlog
       - processing
     image: dashboard
     ports:
