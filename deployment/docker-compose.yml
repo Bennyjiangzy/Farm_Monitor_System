@@ -77,9 +77,6 @@ services:
       - audit_log
       - processing
     image: dashboard
-    network_mode: "host"
-    ports:
-      - "3000:3000"
 # Names our volume
 volumes:
   my-db:
