@@ -74,7 +74,9 @@ def process_messages():
     while maxtry <  app_config["kafka"]["maxtry"]:
         client = KafkaClient(hosts=hostname)
         topic = client.topics[str.encode(app_config["events"]["topic"])]
-        consumer = topic.get_simple_consumer()
+        consumer = topic.get_simple_consumer(consumer_group=b'event_group',
+                                            reset_offset_on_start=False,
+                                            auto_offset_reset=OffsetType.LATEST)
         try:
             logger.info(f'Trying to connect to the Kafka. Current try: {maxtry}')
             consumer.consume()
@@ -83,11 +85,9 @@ def process_messages():
             consumer.stop()
             consumer.start()
             time.sleep(app_config["kafka"]["sleep"])
-            maxtry+=1
+        maxtry+=1
 
-    consumer = topic.get_simple_consumer(consumer_group=b'event_group',
-                                         reset_offset_on_start=False,
-                                         auto_offset_reset=OffsetType.LATEST)
+
 
 
     for msg in consumer:

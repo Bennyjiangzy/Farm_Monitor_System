@@ -9,8 +9,13 @@ import uuid
 import datetime
 from pykafka import KafkaClient
 from flask_cors import CORS, cross_origin
- 
-
+from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
+import time
+test= {
+        "type": "environment",
+        "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        "payload": {}
+        }
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
 
@@ -20,11 +25,26 @@ with open('log_conf.yml', 'r') as f:
 
 logger = logging.getLogger('basicLogger')
 
+maxtry=0
+while maxtry <  app_config["kafka"]["maxtry"]:
+    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
+    topic = client.topics[str.encode(app_config['events']["topic"])]
+    producer = topic.get_sync_producer()
+    try:
+        logger.info(f'Trying to connect to the Kafka producer. Current try: {maxtry}')
+        msg_str = json.dumps(test)
+        producer.produce(msg_str.encode('utf-8'))
+    except (SocketDisconnectedError, LeaderNotAvailable) as e:
+        logger.error(f"Can't connect to the kafka producer. Current try: {maxtry}")
+        producer = topic.get_sync_producer()
+        producer.stop()
+        producer.start()
+        time.sleep(app_config["kafka"]["sleep"])
+    maxtry+=1
+
 def report_environment_info(body):
     trace_id=uuid.uuid4()
     body["traceid"]=str(trace_id)
-    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
-    topic = client.topics[str.encode(app_config['events']["topic"])]
     producer = topic.get_sync_producer()
     msg = {
         "type": "environment",
@@ -38,8 +58,6 @@ def report_environment_info(body):
 def report_resources_info(body):
     trace_id=uuid.uuid4()
     body["traceid"]=str(trace_id)
-    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
-    topic = client.topics[str.encode(app_config['events']["topic"])]
     producer = topic.get_sync_producer()
     msg = {
         "type": "resources",

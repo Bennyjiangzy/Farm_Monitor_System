@@ -1,12 +1,12 @@
 version: 1
 eventstore1:
-  url: http://benny-3855-lab.westeurope.cloudapp.azure.com:8090/farms/env
+  url: http://storage:8090/farms/env
 eventstore2:
-  url: http://benny-3855-lab.westeurope.cloudapp.azure.com:8090/farms/res
+  url: http://storage:8090/farms/res
 events:
   hostname: kafka
   port: 9092
   topic: events
 kafka:
-  maxtry: 10
+  maxtry: 5
   sleep: 5
