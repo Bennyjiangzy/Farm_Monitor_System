@@ -6,7 +6,7 @@ datastore:
   port: 3306
   db: events
 events:
-  hostname: kafka
+  hostname: benny-3855-lab.westeurope.cloudapp.azure.com
   port: 9092
   topic: events
 kafka:
