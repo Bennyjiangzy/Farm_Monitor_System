@@ -114,28 +114,27 @@ def populate_stats():
     
     # #read data from sqlite
     Last_update=show_lasttime()
-    
+    current_time=datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     # get data from storage by get environment
-    response_env = requests.get(app_config['eventstore1']['url']+f"?timestamp={Last_update['last_updated']}")
+    response_env = requests.get(app_config['eventstore1']['url']+f"?timestamp={Last_update['last_updated']}&end_timestamp={current_time}")
     if response_env.status_code == 200:
         logger.info(f'{len(response_env.json())} env info recived with status {response_env.status_code}')
     else:
         logger.error(f'Cannot get the env info with status {response_env.status_code}')
 
-    response_res = requests.get(app_config['eventstore2']['url']+f"?timestamp={Last_update['last_updated']}")
+    response_res = requests.get(app_config['eventstore2']['url']+f"?timestamp={Last_update['last_updated']}&end_timestamp={current_time}")
     if response_res.status_code == 200:
         logger.info(f'{len(response_env.json())} res info recived with status {response_res.status_code}')
     else:
         logger.error(f'Cannot get the res info with status {response_res.status_code}')
 
     # process data
-    print(Last_update)
     processed_env=env_data(response_env.json(),Last_update['nm_env_recived'])
     processed_res=res_data(response_res.json(),Last_update['nm_res_recived'])
 
     # #write data to sqlite
     session = DB_SESSION()
-    current_time=datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    
     stats_data=Stats(
                     processed_env['avg_env_humidity_reading'],
                     processed_env['nm_env_recived'],

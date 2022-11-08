@@ -15,7 +15,9 @@ from pykafka import KafkaClient
 from pykafka.common import OffsetType
 import json
 from flask_cors import CORS, cross_origin
-
+from sqlalchemy import and_
+from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
+import time
 import pymysql
 
 from environment import Environment
@@ -38,10 +40,11 @@ Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-def get_environment_info(timestamp):
+def get_environment_info(timestamp,end_timestamp):
     session = DB_SESSION()
     timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(Environment).filter(Environment.date_created >= timestamp_datetime)
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    readings = session.query(Environment).filter(and_(Environment.date_created >= timestamp_datetime, Environment.date_created < end_timestamp_datetime))
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
@@ -51,10 +54,11 @@ def get_environment_info(timestamp):
     return results_list, 200
 
 
-def get_resources_info(timestamp):
+def get_resources_info(timestamp,end_timestamp):
     session = DB_SESSION()
     timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(Resources).filter(Resources.date_created >= timestamp_datetime)
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    readings = session.query(Resources).filter(and_(Resources.date_created >= timestamp_datetime, Resources.date_created < end_timestamp_datetime))
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
@@ -66,11 +70,26 @@ def get_resources_info(timestamp):
 def process_messages():
     """ Process event messages """
     hostname = "%s:%d" % (app_config["events"]["hostname"], app_config["events"]["port"])
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
+    maxtry=0
+    while maxtry <  app_config["kafka"]["maxtry"]:
+        client = KafkaClient(hosts=hostname)
+        topic = client.topics[str.encode(app_config["events"]["topic"])]
+        consumer = topic.get_simple_consumer()
+        try:
+            logger.info(f'Trying to connect to the Kafka. Current try: {maxtry}')
+            consumer.consume()
+        except (SocketDisconnectedError) as e:
+            logger.error(f"Can't connect to the kafka. Current try: {maxtry}")
+            consumer = topic.get_simple_consumer()
+            consumer.stop()
+            consumer.start()
+            time.sleep(app_config["kafka"]["sleep"])
+            maxtry+=1
+
     consumer = topic.get_simple_consumer(consumer_group=b'event_group',
                                          reset_offset_on_start=False,
                                          auto_offset_reset=OffsetType.LATEST)
+
 
     for msg in consumer:
         msg_str = msg.value.decode('utf-8')

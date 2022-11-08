@@ -27,6 +27,13 @@ paths:
             type: string
             format: date-time
             example: 2016-08-29 09:12:33.001
+        - name: end_timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: 2016-08-29 09:12:33.001        
       responses:
         '200':
           description: Successfully returned a list of environments events
@@ -60,6 +67,13 @@ paths:
             type: string
             format: date-time
             example: 2016-08-29T09:12:33.001Z
+        - name: end_timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: 2016-08-29 09:12:33.001 
       responses:
         '200':
           description: successfully
