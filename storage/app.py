@@ -80,7 +80,7 @@ def process_messages():
         try:
             logger.info(f'Trying to connect to the Kafka. Current try: {maxtry}')
             consumer.consume()
-        except (SocketDisconnectedError) as e:
+        except:
             logger.error(f"Can't connect to the kafka. Current try: {maxtry}")
             consumer.stop()
             consumer.start()

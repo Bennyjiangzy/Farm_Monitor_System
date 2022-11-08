@@ -34,7 +34,7 @@ while maxtry <  app_config["kafka"]["maxtry"]:
         logger.info(f'Trying to connect to the Kafka producer. Current try: {maxtry}')
         msg_str = json.dumps(test)
         producer.produce(msg_str.encode('utf-8'))
-    except (SocketDisconnectedError, LeaderNotAvailable) as e:
+    except:
         logger.error(f"Can't connect to the kafka producer. Current try: {maxtry}")
         producer = topic.get_sync_producer()
         producer.stop()
@@ -75,4 +75,5 @@ app.app.config['CORS_HEADERS'] = 'Content-Type'
 app.add_api("openapi.yml",strict_validation=True,validate_responses=True)
 
 if __name__ == "__main__":
+
     app.run(port=8080)
