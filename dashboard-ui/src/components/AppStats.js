@@ -40,8 +40,8 @@ export default function AppStats() {
 							<th>Average water use</th>
 						</tr>
 						<tr>
-							<td># Env: {stats['avg_env_temp_reading']}</td>
-							<td># Water: {stats['avg_res_water_reading']}</td>
+							<td># Env: {stats['nm_env_recived']}</td>
+							<td># Water: {stats['nm_res_recived']}</td>
 						</tr>
 						<tr>
 							<td colspan="2">Max temperature: {stats['max_env_temp_reading']}</td>
