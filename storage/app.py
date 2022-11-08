@@ -80,7 +80,6 @@ def process_messages():
             consumer.consume()
         except (SocketDisconnectedError) as e:
             logger.error(f"Can't connect to the kafka. Current try: {maxtry}")
-            consumer = topic.get_simple_consumer()
             consumer.stop()
             consumer.start()
             time.sleep(app_config["kafka"]["sleep"])
