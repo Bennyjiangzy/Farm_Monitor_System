@@ -72,21 +72,17 @@ def process_messages():
     hostname = "%s:%d" % (app_config["events"]["hostname"], app_config["events"]["port"])
     maxtry=0
     while maxtry <  app_config["kafka"]["maxtry"]:
-        client = KafkaClient(hosts=hostname)
-        topic = client.topics[str.encode(app_config["events"]["topic"])]
-        consumer = topic.get_simple_consumer(consumer_group=b'event_group',
-                                            reset_offset_on_start=False,
-                                            auto_offset_reset=OffsetType.LATEST)
         try:
             logger.info(f'Trying to connect to the Kafka. Current try: {maxtry}')
-            consumer.consume()
-        except:
+            client = KafkaClient(hosts=hostname)
+            topic = client.topics[str.encode(app_config["events"]["topic"])]
+        except Exception as e:
             logger.error(f"Can't connect to the kafka. Current try: {maxtry}")
-            consumer.stop()
-            consumer.start()
             time.sleep(app_config["kafka"]["sleep"])
         maxtry+=1
-
+    consumer = topic.get_simple_consumer(consumer_group=b'event_group',
+                                    reset_offset_on_start=False,
+                                    auto_offset_reset=OffsetType.LATEST)
 
 
 

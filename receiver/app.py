@@ -27,18 +27,12 @@ logger = logging.getLogger('basicLogger')
 
 maxtry=0
 while maxtry <  app_config["kafka"]["maxtry"]:
-    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
-    topic = client.topics[str.encode(app_config['events']["topic"])]
-    producer = topic.get_sync_producer()
     try:
         logger.info(f'Trying to connect to the Kafka producer. Current try: {maxtry}')
-        msg_str = json.dumps(test)
-        producer.produce(msg_str.encode('utf-8'))
-    except:
+        client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
+        topic = client.topics[str.encode(app_config['events']["topic"])]
+    except Exception as e:
         logger.error(f"Can't connect to the kafka producer. Current try: {maxtry}")
-        producer = topic.get_sync_producer()
-        producer.stop()
-        producer.start()
         time.sleep(app_config["kafka"]["sleep"])
     maxtry+=1
 
