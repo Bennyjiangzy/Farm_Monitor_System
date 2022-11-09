@@ -9,11 +9,14 @@ export default function EndpointAudit(props) {
     const [index, setIndex] = useState(null);
     const getAudit = () => {
         fetch(`http://benny-3855-lab.westeurope.cloudapp.azure.com:8110/${props.endpoint}?index=${rand_val}`)
-            .then(res => res.json())
+            .then(res => {
+                if (res.status == 200) {
+                    setIndex(rand_val)
+                } 
+                return res.json()})
             .then((result)=>{
 				console.log("Received Audit Results for " + props.endpoint)
                 setLog(result);
-                setIndex(rand_val);
                 setIsLoaded(true);
             },(error) =>{
                 console.log(error)
@@ -31,7 +34,6 @@ export default function EndpointAudit(props) {
     } else if (isLoaded === false){
         return(<div>Loading...</div>)
     } else if (isLoaded === true){
-        
         return (
             <div>
                 <h3>{props.endpoint}-{index}</h3>
