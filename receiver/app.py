@@ -11,11 +11,17 @@ from pykafka import KafkaClient
 from flask_cors import CORS, cross_origin
 from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
 import time
-test= {
-        "type": "environment",
-        "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        "payload": {}
-        }
+import os
+
+if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
+    print("In Test Environment")
+    app_conf_file = "/config/app_conf.yml"
+    log_conf_file = "/config/log_conf.yml"
+else:
+    print("In Dev Environment")
+    app_conf_file = "app_conf.yml"
+    log_conf_file = "log_conf.yml"
+
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
 
@@ -24,6 +30,9 @@ with open('log_conf.yml', 'r') as f:
     logging.config.dictConfig(log_config)
 
 logger = logging.getLogger('basicLogger')
+
+logger.info("App Conf File: %s" % app_conf_file)
+logger.info("Log Conf File: %s" % log_conf_file)
 
 maxtry=0
 while maxtry <  app_config["kafka"]["maxtry"]:

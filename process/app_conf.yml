@@ -1,9 +1,0 @@
-version: 1
-datastore:
-  filename: stats.sqlite
-scheduler:
-  period_sec: 5
-eventstore1:
-  url: http://storage:8090/farms/env
-eventstore2:
-  url: http://storage:8090/farms/res
