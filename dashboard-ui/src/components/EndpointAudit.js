@@ -12,9 +12,7 @@ export default function EndpointAudit(props) {
             .then(res => res.json().then(data => ({status: res.status, body: data})))
             .then((result)=>{
 				console.log("Received Audit Results for " + props.endpoint)
-                if (result.status == 200) {
-                    setIndex(rand_val)
-                }
+                setIndex(rand_val)
                 setLog(result.body);
                 setIsLoaded(true);
             },(error) =>{
