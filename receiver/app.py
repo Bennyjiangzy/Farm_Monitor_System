@@ -33,7 +33,7 @@ logger = logging.getLogger('basicLogger')
 
 logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
-logger.info("test: %s" % log_conf_file["handlers"]["file"])
+logger.info(f"test {log_conf_file['handlers']['file']}")
 
 maxtry=0
 while maxtry <  app_config["kafka"]["maxtry"]:
