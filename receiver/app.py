@@ -31,6 +31,8 @@ while maxtry <  app_config["kafka"]["maxtry"]:
         logger.info(f'Trying to connect to the Kafka producer. Current try: {maxtry}')
         client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
         topic = client.topics[str.encode(app_config['events']["topic"])]
+        producer = topic.get_sync_producer()
+        break
     except Exception as e:
         logger.error(f"Can't connect to the kafka producer. Current try: {maxtry}")
         time.sleep(app_config["kafka"]["sleep"])
@@ -39,7 +41,6 @@ while maxtry <  app_config["kafka"]["maxtry"]:
 def report_environment_info(body):
     trace_id=uuid.uuid4()
     body["traceid"]=str(trace_id)
-    producer = topic.get_sync_producer()
     msg = {
         "type": "environment",
         "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
@@ -52,7 +53,6 @@ def report_environment_info(body):
 def report_resources_info(body):
     trace_id=uuid.uuid4()
     body["traceid"]=str(trace_id)
-    producer = topic.get_sync_producer()
     msg = {
         "type": "resources",
         "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
