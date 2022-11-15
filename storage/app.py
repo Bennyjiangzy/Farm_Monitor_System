@@ -76,6 +76,7 @@ def process_messages():
             logger.info(f'Trying to connect to the Kafka. Current try: {maxtry}')
             client = KafkaClient(hosts=hostname)
             topic = client.topics[str.encode(app_config["events"]["topic"])]
+            break
         except Exception as e:
             logger.error(f"Can't connect to the kafka. Current try: {maxtry}")
             time.sleep(app_config["kafka"]["sleep"])
