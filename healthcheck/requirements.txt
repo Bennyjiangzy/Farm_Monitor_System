@@ -1,0 +1,7 @@
+connexion
+swagger-ui-bundle
+requests
+pykafka
+flask-cors
+SQLAlchemy
+APScheduler

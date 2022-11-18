@@ -54,7 +54,7 @@ services:
       - kafka
     image: receiver
     environment:
-      - TARGET_ENV=test
+      - TARGET_ENV=hello
     volumes:
       - /home/azureuser/config/receiver:/config
       - /home/azureuser/logs:/logs
@@ -66,7 +66,7 @@ services:
       - kafka
     image: storage
     environment:
-      - TARGET_ENV=test
+      - TARGET_ENV=hello
     volumes:
       - /home/azureuser/config/storage:/config
       - /home/azureuser/logs:/logs
@@ -78,7 +78,7 @@ services:
       - storage
     image: process
     environment:
-      - TARGET_ENV=test
+      - TARGET_ENV=hello
     volumes:
       - /home/azureuser/config/processing:/config
       - /home/azureuser/logs:/logs
@@ -91,7 +91,7 @@ services:
       - kafka
     image: audit
     environment:
-      - TARGET_ENV=test
+      - TARGET_ENV=hello
     volumes:
       - /home/azureuser/config/audit_log:/config
       - /home/azureuser/logs:/logs
@@ -105,6 +105,18 @@ services:
     image: dashboard
     ports:
       - "3000:3000"
+
+  health:
+    depends_on:
+      - auditlog
+      - dashboard
+      - processing
+      - storage
+      - receiver
+    image: health
+    ports:
+      - "8120:8120"
+
 # Names our volume
 volumes:
   my-db:

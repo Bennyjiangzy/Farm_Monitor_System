@@ -80,6 +80,17 @@ paths:
                     type: string
         '404':
           description: Not Found
+          
+  /health:
+    get:
+      tags:
+      - health_get
+      summary: Get health check from services
+      operationId: app.health_check
+      description: Get health check from services
+      responses:
+        '200':
+          description: service are running
 components:
   schemas:
     EnvironmentInfo:

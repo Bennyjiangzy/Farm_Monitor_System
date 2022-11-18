@@ -48,6 +48,17 @@ paths:
           description: res info created
         "400":
           description: invalid input, object invalid
+  /health:
+    get:
+      tags:
+      - health_get
+      summary: Get health check from services
+      operationId: app.health_check
+      description: Get health check from services
+      responses:
+        '200':
+          description: service are running
+
 components:
   schemas:
     EnvironmentInfo:

@@ -1,0 +1,70 @@
+---
+openapi: 3.0.0
+info:
+  title: Reading API
+  description: This is a API for recive environment and resources information for greenhouses
+  contact:
+    email: zjiang35@bcit.com
+  version: 1.0.0
+tags:
+- name: environment
+  description: environment sensors
+- name: resources
+  description: resource sensors
+paths:
+  /status:
+    get:
+      tags:
+      - servicestatus_get
+      summary: gets status of each services
+      operationId: app.get_status
+      description: gets status of each services
+      responses:
+        '200':
+          description: Successfully returned a list of service's status
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/statusInfo'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    statusInfo:
+      required:
+      - receiver
+      - storage
+      - processing
+      - audit
+      - last_update
+      type: object
+      properties:
+        receiver:
+          type: string
+          example: Running
+        storage:
+          type: string
+          example: Running
+        processing:
+          type: string
+          example: Running
+        audit:
+          type: string
+          example: Running
+        last_update:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      description: status info

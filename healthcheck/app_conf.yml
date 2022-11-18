@@ -1,0 +1,14 @@
+version: 1
+datastore:
+  filename: status.sqlite
+scheduler:
+  period_sec: 20
+audit:
+  url: http://auditlog:3000/health
+receiver:
+  url: http://receiver:8080/health
+storage:
+  url: http://storage:8090/health
+processing:
+  url: http://processing:8100/health
+timeout: 5

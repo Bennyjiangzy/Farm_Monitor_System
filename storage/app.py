@@ -141,6 +141,8 @@ def process_messages():
             logger.info(f"Connecting to DB. Hostname:{database['hostname']}, Port:3306")
         consumer.commit_offsets()
 
+def health_check():
+    return NoContent, 200
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 CORS(app.app)

@@ -71,6 +71,8 @@ def report_resources_info(body):
     producer.produce(msg_str.encode('utf-8'))
     return NoContent, 201
 
+def health_check():
+    return NoContent, 200
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 CORS(app.app)
