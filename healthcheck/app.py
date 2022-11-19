@@ -73,6 +73,7 @@ def show_data():
 def populate_status():
     logger.info("A Health check begins")
     current_data = show_data()
+    
     try:
         response_audit=requests.get(app_config['audit']['url'], timeout=app_config['timeout'])
         if response_audit.status_code == 200:
@@ -90,6 +91,7 @@ def populate_status():
     except:
         current_data['processing'] = "Down"
         logger.info("processing service is down")
+
     try:
         response_receiver=requests.get(app_config['receiver']['url'], timeout=app_config['timeout'])
         if response_receiver.status_code == 200:
