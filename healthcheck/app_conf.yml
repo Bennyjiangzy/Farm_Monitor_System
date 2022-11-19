@@ -4,7 +4,7 @@ datastore:
 scheduler:
   period_sec: 20
 audit:
-  url: http://auditlog:3000/health
+  url: http://auditlog:8110/health
 receiver:
   url: http://receiver:8080/health
 storage:

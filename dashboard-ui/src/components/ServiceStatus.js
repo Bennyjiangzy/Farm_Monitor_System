@@ -33,8 +33,11 @@ export default function AppStats() {
         return(<div>Loading...</div>)
     } else if (isLoaded === true){
         let oldtime = status['last_update'].replace("T", " ").replace("Z", " ");
+        console.log("this is old time")
         console.log(oldtime)
+        console.log("this is newtime")
         console.log(new Date())
+
         let time = Math.round((new Date().getTime() - new Date(oldtime).getTime()) / 1000)
         // console.log(new Date().
         return(
