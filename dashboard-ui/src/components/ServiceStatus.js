@@ -35,8 +35,8 @@ export default function AppStats() {
         let oldtime = status['last_update'].replace("T", " ").replace("Z", " ");
         console.log(oldtime)
         console.log(new Date())
-        let time = Math.round((new Date().getTime() - new Date(oldtime).getTime() + 8*60*60) / 1000)
-        // console.log(new Date().
+        let time = Math.round((new Date().getTime() - new Date(oldtime).getTime()) / 1000)
+        time = time + 8*60*60
         return(
             <div>
                 <h1>Service status</h1>
