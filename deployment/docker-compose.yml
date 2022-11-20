@@ -102,7 +102,7 @@ services:
     depends_on:
       - auditlog
       - processing
-    image: dashboard
+    image: dashboard:assign2
     ports:
       - "3000:3000"
 
