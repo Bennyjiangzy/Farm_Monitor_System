@@ -102,7 +102,7 @@ services:
     depends_on:
       - auditlog
       - processing
-    image: dashboard
+    image: dashboardlab
     ports:
       - "3000:3000"
 # Names our volume
