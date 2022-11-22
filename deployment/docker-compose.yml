@@ -114,10 +114,17 @@ services:
       - storage
       - receiver
     image: health
+    environment:
+      - TARGET_ENV=test
     ports:
       - "8120:8120"
+    volumes:
+      - /home/azureuser/config/health:/config
+      - /home/azureuser/logs:/logs
+      - health-db:/data
 
 # Names our volume
 volumes:
   my-db:
   processing-db:
+  health-db:
