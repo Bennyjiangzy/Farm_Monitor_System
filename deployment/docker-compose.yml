@@ -98,7 +98,7 @@ services:
   processing:
     depends_on:
       - storage
-    image: process
+    image: processing
     environment:
       - TARGET_ENV=test
     volumes:
@@ -113,7 +113,7 @@ services:
   auditlog:
     depends_on:
       - kafka
-    image: audit
+    image: auditlog
     environment:
       - TARGET_ENV=test
     volumes:
