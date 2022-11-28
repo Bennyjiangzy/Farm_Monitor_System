@@ -41,7 +41,7 @@ export default function AppStats() {
 						</tr>
 						<tr>
 							<td># Env: {stats['nm_env_recived']}</td>
-							<td># Water: {stats['nm_res_recived']}</td>
+							<td># Res: {stats['nm_res_recived']}</td>
 						</tr>
 						<tr>
 							<td colspan="2">Max temperature: {stats['max_env_temp_reading']}</td>
